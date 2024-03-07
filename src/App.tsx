@@ -18,7 +18,8 @@ const App = () => {
         onClose={() => setIsOpen(false)}
         toDo={toDo}
       />
-      <div className="bg-[#FEFEFE] absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl overflow-x-hidden overflow-y-scroll w-full h-[555px]
+      <div className="bg-[#FEFEFE] absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-xl overflow-x-hidden overflow-y-scroll w-full h-[90%]
+      sm:h-[555px]
       md:w-[80%]
       lg:w-[68%]
       xl:overflow-hidden

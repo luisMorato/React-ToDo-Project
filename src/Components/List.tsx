@@ -8,17 +8,20 @@ import { useContext } from "react";
 import { EditModalContext } from "../Context/EditModalContext";
 import toast from "react-hot-toast";
 
+type toDo = {
+    id?: number,
+    title?: string,
+    category?: string,    
+    completed?: boolean,
+    fixed?: boolean
+}
+
 type ListProps = {
-    toDo: {
-        id?: number,
-        title?: string,
-        category?: string,    
-        completed?: boolean,
-        fixed?: boolean
-    }
+    toDo: toDo,
+    filteredToDos: toDo[],
 };
 
-const List = ({ toDo }: ListProps) => {
+const List = ({ toDo, filteredToDos }: ListProps) => {
     const { setIsOpen, setToDo: setCurrentToDo } = useContext(EditModalContext);
     const {toDos, setTodos} = useLocalStorage("toDo");
 
@@ -80,9 +83,9 @@ const List = ({ toDo }: ListProps) => {
     
     return toDo && (
         <div>
-            <div 
+            <div
                 className={`relative flex justify-between w-full py-4 px-3
-                    ${toDos.findIndex((task) => task.id === toDo.id) % 2 === 0 ? "bg-[#d9d9d934]" : "bg-white"}
+                    ${filteredToDos.findIndex((task) => task.id === toDo.id) % 2 === 0 ? "bg-[#d9d9d934]" : "bg-white"}
                 `}
             >
                 <div className="flex items-center justify-between gap-x-2"> 

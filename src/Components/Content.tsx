@@ -100,6 +100,7 @@ const Content = () => {
                         <List
                             key={toDo.id}
                             toDo={toDo}
+                            filteredToDos={filteredToDos}
                         />
                     ))
                     :
