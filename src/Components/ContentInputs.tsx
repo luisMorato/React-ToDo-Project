@@ -50,26 +50,38 @@ const ContentInputs = () => {
                 </button>
             </div>
             {isOpen && 
-                <div className="absolute top-full left-0 -translate-y-2 h-fit bg-white w-full z-50 rounded-bl-md rounded-br-md border border-neutral-400/70 border-t-transparent">
+                <div className="absolute top-full left-0 -translate-y-2 h-fit bg-white w-full z-50 rounded-bl-md rounded-br-md border border-neutral-400/70 border-t-transparent duration-500">
                     <ul className="w-full px-5">
                         <li 
                             id="complete"
-                            onClick={(e) => setSort(e.currentTarget.id)}
+                            onClick={(e) => {
+                                setIsOpen(false);
+                                setSort(e.currentTarget.id);
+                            }}
                             className="py-2 border-b cursor-pointer hover:font-medium"
                         >Complete</li>
                         <li
                             id="incomplete"
-                            onClick={(e) => setSort(e.currentTarget.id)}
+                            onClick={(e) => {
+                                setIsOpen(false);
+                                setSort(e.currentTarget.id);
+                            }}
                             className="py-2 border-b cursor-pointer hover:font-medium"
                         >Incomplete</li>
                         <li 
                             id="Fisrt Added"
-                            onClick={(e) => setSort(e.currentTarget.id)}
+                            onClick={(e) => {
+                                setIsOpen(false);
+                                setSort(e.currentTarget.id);
+                            }}
                             className="py-2 border-b cursor-pointer hover:font-medium"
                         >Fisrt Added</li>
                         <li 
                             id="Last Added"
-                            onClick={(e) => setSort(e.currentTarget.id)}
+                            onClick={(e) => {
+                                setIsOpen(false);
+                                setSort(e.currentTarget.id);
+                            }}
                             className="py-2 cursor-pointer hover:font-medium"
                         >Last Added</li>
                     </ul>

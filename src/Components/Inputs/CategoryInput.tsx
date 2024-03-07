@@ -16,6 +16,10 @@ const CategoryInput = ({
     isOpen,
     emptyInput
  }: CategoryInputProps) => {
+    // const handleClick = () => {
+
+    // }
+
     return (
         <>
             <div className={`flex items-center justify-between px-2 py-1 border text-neutral-400 rounded-md
@@ -41,8 +45,8 @@ const CategoryInput = ({
                         <li 
                             id="work"
                             onClick={(e) => {
-                                setCategory(e.currentTarget.id)
                                 setIsOpen(false)
+                                setCategory(e.currentTarget.id)
                             }}
                             className={`py-2 border-b cursor-pointer hover:font-medium`}
                         >Work</li>

@@ -95,7 +95,7 @@ const Content = () => {
             >
                 {filteredToDos && toDos.length > 0 ?
                     filteredToDos
-                    .filter((toDo) => toDo.title?.includes(search))
+                    .filter((toDo) => toDo.title?.toLowerCase().replace(/\s/g, '').includes(search.toLowerCase().replace(/\s/g, '')))
                     .map((toDo) => (
                         <List
                             key={toDo.id}
