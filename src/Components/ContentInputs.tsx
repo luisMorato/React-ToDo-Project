@@ -7,7 +7,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 const ContentInputs = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const { toDos } = useLocalStorage("toDo");
-    const { setSearch, setSort, Sort } = useContext(SortAndSearchContext);
+    const { search, setSearch, setSort, Sort } = useContext(SortAndSearchContext);
 
     return (
         <div className="relative flex flex-col gap-y-2">
@@ -30,7 +30,7 @@ const ContentInputs = () => {
                     <p className={
                         `opacity duration-200
                         ${isOpen ? "opacity-0" : "opacity-1"}
-                    `}>{Sort && toDos.length > 0 ? Sort : "Sort By"}</p>
+                    `}>{Sort && !search && toDos.length > 0 ? Sort : "Sort By"}</p>
                 </div>
                 <button
                     onClick={() => {setIsOpen((prevValue) => !prevValue)}}
@@ -63,12 +63,12 @@ const ContentInputs = () => {
                             className="py-2 border-b cursor-pointer hover:font-medium"
                         >Incomplete</li>
                         <li 
-                            id="ascending"
+                            id="Fisrt Added"
                             onClick={(e) => setSort(e.currentTarget.id)}
                             className="py-2 border-b cursor-pointer hover:font-medium"
                         >Fisrt Added</li>
                         <li 
-                            id="descending"
+                            id="Last Added"
                             onClick={(e) => setSort(e.currentTarget.id)}
                             className="py-2 cursor-pointer hover:font-medium"
                         >Last Added</li>

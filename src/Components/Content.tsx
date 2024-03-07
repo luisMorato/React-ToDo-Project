@@ -24,7 +24,7 @@ const Content = () => {
             let filtered = toDos;
             
             if(Sort){
-                switch(Sort){
+                switch(Sort.replace(" ", "")){
                     case "complete":
                         return [...filtered] = filtered.sort((toDoA, toDoB) => {
                             if(toDoB.completed === toDoA.completed){
@@ -45,11 +45,11 @@ const Content = () => {
                                 }
                                 return 1;
                             });
-                        case "ascending":
+                        case "FisrtAdded":
                             return [...filtered] = filtered.sort((toDoA, toDoB) => {
                                  return toDoB.id! - toDoA.id!
                             });
-                        case "descending":
+                        case "LastAdded":
                             return [...filtered] = filtered.sort((toDoA, toDoB) => {
                                     return toDoA.id! - toDoB.id!
                             });
