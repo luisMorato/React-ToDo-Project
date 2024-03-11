@@ -1,4 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState, useTransition } from "react";
+import toast from "react-hot-toast";
+
 import { SortAndSearchContext } from "../Context/SortAndSearchContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
@@ -14,7 +16,9 @@ type toDo = {
 };
 
 const Content = () => {
-    const { toDos } = useLocalStorage("toDo");
+    const [isPending, startTransition] = useTransition();
+
+    const {toDos, setTodos} = useLocalStorage("toDo");
     const { search, Sort } = useContext(SortAndSearchContext);
 
     const [filteredToDos, setFilteredToDos] = useState<Array<toDo>>([]);
@@ -78,6 +82,83 @@ const Content = () => {
         }
     }, [toDos]);
 
+    const RemoveToDo = useCallback((id: number) => {
+        if(id === null || id === undefined){
+            toast.error('Something Went Wrong!');
+            return;
+        }
+
+        try {
+            startTransition(() => {
+                setTodos(toDos.filter((toDo) => toDo.id !== id));
+            });
+            toast.success('Task Removed Successfully!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        } catch (error) {
+            console.log('error: ', error);
+            toast.error('Something Went Wrong!');
+        }
+    }, [setTodos, toDos])
+
+    const CompleteToDo = useCallback((id: number) => {
+        if(id === null || id === undefined){
+            toast.error('Something Went Wrong!');
+            return;
+        }
+
+        const searchToDo = toDos.find((toDo) => toDo.id === id);
+
+        if(searchToDo){
+            try {
+                startTransition(() => {
+                    searchToDo.completed = !searchToDo.completed;
+
+                    setTodos([
+                        ...(toDos.filter((toDo) => toDo.id !== searchToDo.id)),
+                        searchToDo
+                    ]);
+                });
+                toast.success(searchToDo.completed ? `State Updated to Completed!` : `State Updated to Incompleted!`);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } catch (error) {
+                console.log('error: ', error);
+                toast.error('Something Went Wrong!');
+            }
+        }
+    }, [setTodos, toDos])
+
+    const pinningToDo = useCallback((id: number) => {
+        if(id === null || id === undefined){
+            toast.error('Something Went Wrong!');
+            return;
+        }
+
+        const searchToDo = toDos.find((toDo) => toDo.id === id);
+
+        if(searchToDo){
+            try {
+                startTransition(() => {
+                    searchToDo.fixed = !searchToDo.fixed;
+                    setTodos([
+                        ...toDos.filter((toDo) => toDo.id !== searchToDo.id),
+                        searchToDo
+                    ]);
+                });
+                toast.success(searchToDo.fixed ? `Task Pinned Successfully!` : `Task Unpinned Successfully!`);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } catch (error) {
+                console.log('error: ', error);
+                toast.error('Something Went Wrong!');
+            }
+        }
+    }, [setTodos, toDos]);
+
     return (
         <div className="w-full mt-5 px-5
         xl:px-0
@@ -101,6 +182,10 @@ const Content = () => {
                             key={toDo.id}
                             toDo={toDo}
                             filteredToDos={filteredToDos}
+                            RemoveToDo={RemoveToDo}
+                            CompleteToDo={CompleteToDo}
+                            pinningToDo={pinningToDo}
+                            isPending={isPending}
                         />
                     ))
                     :

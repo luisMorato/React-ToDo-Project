@@ -1,12 +1,12 @@
-import { useContext, useTransition } from "react";
+import { useContext } from "react";
 import { FaCheck, FaX } from "react-icons/fa6";
 import { MdModeEditOutline } from "react-icons/md";
 
-import { useLocalStorage } from "../hooks/useLocalStorage";
+// import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import { captalize } from "../utils/helpfullFunctions";
 import { EditModalContext } from "../Context/EditModalContext";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 type toDo = {
     id?: number,
@@ -19,100 +19,21 @@ type toDo = {
 type ListProps = {
     toDo: toDo,
     filteredToDos: toDo[],
+    RemoveToDo: (id: number) => void,
+    CompleteToDo: (id: number) => void,
+    pinningToDo: (id: number) => void,
+    isPending: boolean
 };
 
-const List = ({ toDo, filteredToDos }: ListProps) => {
-    const [isPending, startTransition] = useTransition();
-
+const List = ({ 
+    toDo,
+    filteredToDos,
+    RemoveToDo,
+    CompleteToDo,
+    pinningToDo,
+    isPending
+ }: ListProps) => {
     const { setIsOpen, setToDo: setCurrentToDo } = useContext(EditModalContext);
-    const {toDos, setTodos} = useLocalStorage("toDo");
-
-    const RemoveToDo = (id: number) => {
-        if(id === null || id === undefined){
-            toast.error('Something Went Wrong!');
-            return;
-        }
-
-        try {
-            startTransition(() => {
-                setTodos(toDos.filter((toDo) => toDo.id !== id));
-                // for(let i = 0; i < toDos.length; i++){
-                //     setTodos([
-                //         ...toDos,
-                //         {
-                //             ...toDo,
-                //             id: toDos.length
-                //         }
-                //     ]);
-                // }
-                // console.log(toDos);
-            });
-            toast.success('Task Removed Successfully!');
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        } catch (error) {
-            console.log('error: ', error);
-            toast.error('Something Went Wrong!');
-        }
-    }
-
-    const CompleteToDo = (id: number) => {
-        if(id === null || id === undefined){
-            toast.error('Something Went Wrong!');
-            return;
-        }
-
-        const searchToDo = toDos.find((toDo) => toDo.id === id);
-
-        if(searchToDo){
-            try {
-                startTransition(() => {
-                    searchToDo.completed = !searchToDo.completed;
-
-                    setTodos([
-                        ...(toDos.filter((toDo) => toDo.id !== searchToDo.id)),
-                        searchToDo
-                    ]);
-                });
-                toast.success(searchToDo.completed ? `State Updated to Completed!` : `State Updated to Incompleted!`);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            } catch (error) {
-                console.log('error: ', error);
-                toast.error('Something Went Wrong!');
-            }
-        }
-    }
-
-    const pinningToDo = (id: number) => {
-        if(id === null || id === undefined){
-            toast.error('Something Went Wrong!');
-            return;
-        }
-
-        const searchToDo = toDos.find((toDo) => toDo.id === id);
-
-        if(searchToDo){
-            try {
-                startTransition(() => {
-                    searchToDo.fixed = !searchToDo.fixed;
-                    setTodos([
-                        ...toDos.filter((toDo) => toDo.id !== searchToDo.id),
-                        searchToDo
-                    ]);
-                });
-                toast.success(searchToDo.fixed ? `Task Pinned Successfully!` : `Task Unpinned Successfully!`);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            } catch (error) {
-                console.log('error: ', error);
-                toast.error('Something Went Wrong!');
-            }
-        }
-    }
     
     return toDo && (
         <div

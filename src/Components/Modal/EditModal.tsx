@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 
@@ -25,12 +25,12 @@ const EditModal = ({
     onClose,
     toDo
 }: modalProps) => {
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setShowModal(false);
         setTimeout(() => {
             onClose!();
         }, 300);
-    }
+    }, [onClose]);
 
     const { toDos, setTodos } = useLocalStorage("toDo");
 
@@ -57,6 +57,10 @@ const EditModal = ({
         const taskToUpdate = toDos.find((task) => task.id === toDo?.id)!;
 
         if(newTitle){
+            if(toDos.some((toDo) => toDo?.title === newTitle)){
+                toast.error('Task Already Exists!');
+                return;
+            }
             taskToUpdate.title = newTitle;
 
         }
