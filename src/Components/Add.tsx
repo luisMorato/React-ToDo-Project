@@ -26,10 +26,10 @@ const Add = () => {
     const {toDos, setTodos} = useLocalStorage("toDo");
 
     const autoIncrement = () => {
-        const biggestId = toDos.reduce((prevId, currentId) => {
-            return currentId.id! > prevId.id! ? currentId : prevId;
-        }, {id: 0});
-        return biggestId.id! + 1;
+        const biggestId = toDos.reduce((prevId, currentToDo) => {
+            return Math.max(prevId, currentToDo.id as number)
+        }, 0);
+        return biggestId + 1;
     }
 
     const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
