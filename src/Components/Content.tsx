@@ -104,7 +104,7 @@ const Content = () => {
                         />
                     ))
                     :
-                    <h2 className="text-center font-medium text-xl mt-10">The List Is Empty</h2>
+                    (<h2 className="text-center font-medium text-xl mt-10">The List Is Empty</h2>)
                 }
             </div>
         </div>

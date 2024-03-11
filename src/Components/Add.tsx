@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { FaPlus } from "react-icons/fa6";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -15,6 +15,8 @@ type toDo = {
 };
 
 const Add = () => {
+    const [isPending, startTransition] = useTransition();
+
     const [isOpen, setIsOpen] = useState<boolean>(false);
     
     const [addToDo, setAddToDo] = useState<toDo | undefined>(undefined);
@@ -23,10 +25,16 @@ const Add = () => {
 
     const {toDos, setTodos} = useLocalStorage("toDo");
 
+    const autoIncrement = () => {
+        const biggestId = toDos.reduce((prevId, currentId) => {
+            return currentId.id! > prevId.id! ? currentId : prevId;
+        }, {id: 0});
+        return biggestId.id! + 1;
+    }
+
     const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAddToDo({
-            ...addToDo,
-            id: (toDos.length > 0 ? toDos.length : 0) as number,
+            id: autoIncrement() as number,
             title: e.target.value,
             completed: false,
             fixed: false
@@ -51,14 +59,21 @@ const Add = () => {
 
         if(completedToDo){
             setEmptyInput(false);
-            setTodos([
-                ...toDos,
-                completedToDo
-            ]);
-            toast.success('Task Added Successfully!');
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+            try {
+                startTransition(() => {
+                    setTodos([
+                        ...toDos,
+                        completedToDo
+                    ]);
+                });
+                toast.success('Task Added Successfully!');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } catch (error) {
+                console.log('Error: ', error);
+                toast.error('Something Went Wrong!');
+            }
         }
     }
 
@@ -74,7 +89,8 @@ const Add = () => {
                     placeholder="Type the Title"
                     type="text"
                     onChange={(e) => handleEdit(e)}
-                    className={`border border-neutral-400/70 text-neutral-400 font-medium rounded-md w-full px-2 py-2 focus:outline-none
+                    disabled={isPending}
+                    className={`border border-neutral-400/70 text-neutral-400 font-medium rounded-md w-full px-2 py-2 focus:outline-none disabled:cursor-wait
                     ${emptyInput ? "border-red-600" : "border-neutral-400/70"}`}
                 />
                 <CategoryInput 
@@ -87,7 +103,8 @@ const Add = () => {
             </div>
             <button
                 onClick={handleAdd}
-                className="bg-[#8421E8] text-white text-lg font-medium flex items-center justify-center gap-x-2 rounded-md w-full py-2 hover:bg-[#A150F1]"
+                disabled={isPending}
+                className="bg-[#8421E8] text-white text-lg font-medium flex items-center justify-center gap-x-2 rounded-md w-full py-2 disabled:cursor-wait hover:bg-[#A150F1]"
             >
                 <FaPlus />
                 <span>Add to List</span>

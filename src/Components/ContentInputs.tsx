@@ -50,7 +50,7 @@ const ContentInputs = () => {
                 </button>
             </div>
             {isOpen && 
-                <div className="absolute top-full left-0 -translate-y-2 h-fit bg-white w-full z-50 rounded-bl-md rounded-br-md border border-neutral-400/70 border-t-transparent duration-500">
+                <div className={`absolute top-full left-0 -translate-y-2 h-fit bg-white w-full z-50 rounded-bl-md rounded-br-md border border-neutral-400/70 border-t-transparent duration-500`}>
                     <ul className="w-full px-5">
                         <li 
                             id="complete"
